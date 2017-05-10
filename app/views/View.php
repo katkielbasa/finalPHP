@@ -22,48 +22,48 @@ class View{
 		}
 		return implode(',', $csv);
 	}
-	function create_xml($array){
-	 return	$xml = Array2XML::createXML('<root_node_name>', $array);
-	}
+//	function create_xml($array){
+//	 return	$xml = Array2XML::createXML('<root_node_name>', $array);
+//	}
 	
-	public function xml_encode($mixed, $domElement=null, $DOMDocument=null) {
-		if (is_null($DOMDocument)) {
-			$DOMDocument =new DOMDocument;
-			$DOMDocument->formatOutput = true;
-			$this-> xml_encode($mixed, $DOMDocument, $DOMDocument);
-			echo $DOMDocument->saveXML();
-		}
-		else {
-			if (is_array($mixed)) {
-				foreach ($mixed as $index => $mixedElement) {
-					if (is_int($index)) {
-						if ($index === 0) {
-							$node = $domElement;
-						}
-						else {
-							$node = $DOMDocument->createElement($domElement->tagName);
-							$domElement->parentNode->appendChild($node);
-						}
-					}
-					else {
-						$plural = $DOMDocument->createElement($index);
-						$domElement->appendChild($plural);
-						$node = $plural;
-						if (!(rtrim($index, 's') === $index)) {
-							$singular = $DOMDocument->createElement(rtrim($index, 's'));
-							$plural->appendChild($singular);
-							$node = $singular;
-						}
-					}
-
-					$this-> xml_encode($mixedElement, $node, $DOMDocument);
-				}
-			}
-			else {
-				$domElement->appendChild($DOMDocument->createTextNode($mixed));
-			}
-		}
-	}
+//	public function xml_encode($mixed, $domElement=null, $DOMDocument=null) {
+//		if (is_null($DOMDocument)) {
+//			$DOMDocument =new DOMDocument;
+//			$DOMDocument->formatOutput = true;
+//			$this-> xml_encode($mixed, $DOMDocument, $DOMDocument);
+//			echo $DOMDocument->saveXML();
+//		}
+//		else {
+//			if (is_array($mixed)) {
+//				foreach ($mixed as $index => $mixedElement) {
+//					if (is_int($index)) {
+//						if ($index === 0) {
+//							$node = $domElement;
+//						}
+//						else {
+//							$node = $DOMDocument->createElement($domElement->tagName);
+//							$domElement->parentNode->appendChild($node);
+//						}
+//					}
+//					else {
+//						$plural = $DOMDocument->createElement($index);
+//						$domElement->appendChild($plural);
+//						$node = $plural;
+//						if (!(rtrim($index, 's') === $index)) {
+//							$singular = $DOMDocument->createElement(rtrim($index, 's'));
+//							$plural->appendChild($singular);
+//							$node = $singular;
+//						}
+//					}
+//
+//					$this-> xml_encode($mixedElement, $node, $DOMDocument);
+//				}
+//			}
+//			else {
+//				$domElement->appendChild($DOMDocument->createTextNode($mixed));
+//			}
+//		}
+//	}
 
 	public function jsonOutput(){
 		return (json_encode($this -> model -> output));
@@ -71,7 +71,7 @@ class View{
 
 
 	public function xmlOutput(){
-		return($this-> create_xml($this -> model -> output));
+		return($this-> xml_encode($this -> model -> output));
 
 	}
 
@@ -93,7 +93,7 @@ class View{
 			case "application/json":
 				return $this->jsonOutput();
 				break;
-			case "application/csv":
+			case "text/csv":
 				return $this->csvOutput();
 				break;
 			case "text/plain":
@@ -102,8 +102,6 @@ class View{
 			case "text/html":
 				return $this->htmlOutput();
 				break;
-			case "application/xml":
-				return $this->xmlOutput();
 			default:
 				return "Hello!!!!!!";
 		}

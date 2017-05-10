@@ -1,6 +1,5 @@
 <?php
-/*Web Application Architectures - Lab 6
- Dearbhail Kirwan - D13128910*/
+/*Kasia*/
 session_start ();
 
 require_once '../Slim/Slim.php';
